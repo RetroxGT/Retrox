@@ -6,28 +6,47 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>Retrox — Gorilla Tag Mods</title>
+  <meta
+    name="description"
+    content="Retrox is a Gorilla Tag modding hub for PC & VR mods, Frida/root tools, and more."
+  >
 
   <style>
+    /* =========================
+       RESET
+    ========================= */
+
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: Arial, Helvetica, sans-serif;
     }
 
-    html, body {
-      width: 100%;
-      min-height: 100%;
-      background: #000;
-      color: #fff;
-      overflow-x: hidden;
+    html {
+      scroll-behavior: smooth;
     }
 
     body {
-      position: relative;
+      background: #000;
+      color: #fff;
+      font-family: Inter, Arial, Helvetica, sans-serif;
+      overflow-x: hidden;
     }
 
-    /* PARTICLE BACKGROUND */
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button,
+    a {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* =========================
+       PARTICLE BACKGROUND
+    ========================= */
+
     #particles {
       position: fixed;
       inset: 0;
@@ -37,248 +56,645 @@
       pointer-events: none;
     }
 
-    .overlay {
+    .background-fade {
       position: fixed;
       inset: 0;
-      background: radial-gradient(
-        circle at center,
-        rgba(255,255,255,0.025),
-        rgba(0,0,0,0.9) 75%
-      );
       z-index: 1;
       pointer-events: none;
+      background:
+        radial-gradient(
+          circle at 50% 30%,
+          rgba(255,255,255,0.035),
+          transparent 38%
+        ),
+        linear-gradient(
+          rgba(0,0,0,0.15),
+          rgba(0,0,0,0.9)
+        );
     }
 
-    /* NAVBAR */
+    /* =========================
+       NAVBAR
+    ========================= */
+
     nav {
       position: relative;
-      z-index: 5;
-      width: 100%;
-      padding: 22px 6%;
+      z-index: 10;
+      width: min(1150px, calc(100% - 40px));
+      margin: 0 auto;
+      padding: 22px 0;
+
       display: flex;
       align-items: center;
       justify-content: space-between;
     }
 
-    .logo {
-      font-size: 22px;
-      font-weight: 800;
+    .brand {
+      font-size: 20px;
+      font-weight: 900;
       letter-spacing: -0.8px;
     }
 
     .nav-links {
       display: flex;
-      gap: 10px;
+      align-items: center;
+      gap: 6px;
     }
 
-    .nav-links a {
-      color: #aaa;
-      text-decoration: none;
-      font-size: 14px;
-      padding: 9px 14px;
+    .nav-link {
+      padding: 9px 13px;
+      color: #777;
+      font-size: 13px;
       border-radius: 8px;
       transition: 0.2s ease;
     }
 
-    .nav-links a:hover {
+    .nav-link:hover {
       color: #fff;
-      background: #111;
+      background: #0b0b0b;
     }
 
-    /* HERO */
+    /* =========================
+       HERO
+    ========================= */
+
     .hero {
       position: relative;
-      z-index: 3;
-      min-height: calc(100vh - 75px);
+      z-index: 5;
+
+      min-height: 88vh;
+      width: min(1000px, calc(100% - 40px));
+      margin: 0 auto;
+
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
+
       text-align: center;
-      padding: 40px 20px;
+      padding: 80px 0 70px;
     }
 
-    .hero h1 {
-      font-size: clamp(65px, 12vw, 145px);
-      line-height: 0.9;
-      font-weight: 900;
-      letter-spacing: -7px;
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+
+      padding: 7px 11px;
+      border: 1px solid #171717;
+      border-radius: 999px;
+
+      background: rgba(7,7,7,0.8);
+      color: #777;
+
+      font-size: 11px;
+      font-weight: 600;
+
+      margin-bottom: 25px;
+
+      animation: fadeUp 0.7s ease both;
     }
 
-    .typing {
-      margin-top: 20px;
-      min-height: 30px;
-      color: #d0d0d0;
-      font-size: clamp(16px, 2vw, 21px);
-      font-weight: 500;
+    .badge-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: #fff;
+      box-shadow: 0 0 8px rgba(255,255,255,0.8);
+    }
+
+    .hero-title {
+      font-size: clamp(70px, 13vw, 150px);
+      line-height: 0.82;
+      letter-spacing: -8px;
+      font-weight: 950;
+
+      animation: fadeUp 0.8s ease 0.05s both;
+    }
+
+    .typing-container {
+      margin-top: 28px;
+
+      min-height: 31px;
+
+      color: #ddd;
+      font-size: clamp(17px, 2.5vw, 24px);
+      font-weight: 600;
+
+      animation: fadeUp 0.8s ease 0.12s both;
+    }
+
+    #typed {
+      color: #fff;
     }
 
     .cursor {
       display: inline-block;
       width: 2px;
-      height: 20px;
+      height: 23px;
+      margin-left: 5px;
+
+      vertical-align: -3px;
+
       background: #fff;
-      margin-left: 4px;
-      vertical-align: middle;
-      animation: blink 0.8s infinite;
+
+      animation: cursorBlink 0.8s infinite;
     }
 
-    @keyframes blink {
+    @keyframes cursorBlink {
       50% {
         opacity: 0;
       }
     }
 
-    .description {
-      max-width: 600px;
-      margin-top: 18px;
-      color: #777;
-      line-height: 1.6;
+    .hero-description {
+      width: min(610px, 100%);
+
+      margin-top: 19px;
+
+      color: #666;
       font-size: 14px;
+      line-height: 1.7;
+
+      animation: fadeUp 0.8s ease 0.18s both;
     }
 
-    /* BUTTONS */
-    .buttons {
+    /* =========================
+       BUTTONS
+    ========================= */
+
+    .hero-buttons {
       display: flex;
       gap: 10px;
-      margin-top: 28px;
       flex-wrap: wrap;
       justify-content: center;
+
+      margin-top: 30px;
+
+      animation: fadeUp 0.8s ease 0.24s both;
     }
 
-    .btn {
+    .button {
+      min-width: 135px;
+
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      min-width: 135px;
+
       padding: 12px 19px;
+
       border-radius: 9px;
-      border: 1px solid #222;
-      background: #090909;
+      border: 1px solid #202020;
+
+      background: #080808;
       color: #fff;
-      text-decoration: none;
-      font-size: 14px;
-      font-weight: 700;
-      transition: 0.2s ease;
+
+      font-size: 13px;
+      font-weight: 800;
+
+      transition:
+        transform 0.2s ease,
+        background 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
     }
 
-    .btn:hover {
-      background: #151515;
+    .button:hover {
+      transform: translateY(-3px);
+      background: #111;
       border-color: #444;
-      transform: translateY(-2px);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.6);
     }
 
-    .btn.primary {
+    .button.primary {
       background: #fff;
       color: #000;
       border-color: #fff;
     }
 
-    .btn.primary:hover {
+    .button.primary:hover {
       background: #ddd;
+      border-color: #ddd;
     }
 
-    /* GIF */
-    .gif-box {
-      margin-top: 50px;
-      width: min(520px, 90vw);
-      height: 220px;
-      border: 1px solid #181818;
-      border-radius: 14px;
-      overflow: hidden;
+    /* =========================
+       GIF SHOWCASE
+    ========================= */
+
+    .showcase {
+      position: relative;
+      width: min(760px, 100%);
+
+      margin-top: 65px;
+
+      border: 1px solid #161616;
+      border-radius: 18px;
+
       background: #050505;
-      box-shadow: 0 20px 70px rgba(0,0,0,0.7);
+
+      overflow: hidden;
+
+      box-shadow:
+        0 30px 100px rgba(0,0,0,0.8),
+        inset 0 1px rgba(255,255,255,0.025);
+
+      animation: fadeUp 1s ease 0.3s both;
     }
 
-    .gif-box img {
+    .showcase-top {
+      height: 38px;
+
+      display: flex;
+      align-items: center;
+
+      padding: 0 14px;
+
+      border-bottom: 1px solid #111;
+    }
+
+    .window-dots {
+      display: flex;
+      gap: 5px;
+    }
+
+    .window-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #333;
+    }
+
+    .showcase-label {
+      margin-left: auto;
+
+      color: #444;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .gif-container {
+      width: 100%;
+      height: 300px;
+      background: #020202;
+    }
+
+    .gif-container img {
       width: 100%;
       height: 100%;
-      object-fit: cover;
       display: block;
-      opacity: 0.8;
+
+      object-fit: cover;
+
+      opacity: 0.82;
     }
 
-    /* FEATURES */
-    .features {
+    /* =========================
+       SECTION
+    ========================= */
+
+    .section {
       position: relative;
-      z-index: 3;
-      max-width: 1050px;
+      z-index: 5;
+
+      width: min(1050px, calc(100% - 40px));
       margin: 0 auto;
-      padding: 80px 25px 120px;
+
+      padding: 100px 0;
     }
 
-    .section-title {
+    .section-heading {
       text-align: center;
-      margin-bottom: 35px;
+      margin-bottom: 38px;
     }
 
-    .section-title h2 {
-      font-size: 28px;
+    .section-heading span {
+      color: #444;
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 2px;
     }
 
-    .section-title p {
-      color: #666;
-      margin-top: 8px;
-      font-size: 14px;
+    .section-heading h2 {
+      margin-top: 9px;
+
+      font-size: clamp(28px, 4vw, 42px);
+      letter-spacing: -1.5px;
     }
+
+    .section-heading p {
+      margin: 10px auto 0;
+
+      max-width: 520px;
+
+      color: #555;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    /* =========================
+       CARDS
+    ========================= */
 
     .cards {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 14px;
+      gap: 13px;
     }
 
     .card {
-      background: rgba(8,8,8,0.92);
-      border: 1px solid #171717;
-      border-radius: 13px;
+      position: relative;
+
       padding: 25px;
+
+      min-height: 180px;
+
+      border: 1px solid #151515;
+      border-radius: 14px;
+
+      background:
+        linear-gradient(
+          145deg,
+          rgba(15,15,15,0.9),
+          rgba(4,4,4,0.95)
+        );
+
+      overflow: hidden;
+
+      transition:
+        transform 0.25s ease,
+        border-color 0.25s ease,
+        background 0.25s ease;
+    }
+
+    .card::before {
+      content: "";
+
+      position: absolute;
+      inset: 0;
+
+      background:
+        radial-gradient(
+          circle at top right,
+          rgba(255,255,255,0.045),
+          transparent 35%
+        );
+
+      opacity: 0;
       transition: 0.25s ease;
     }
 
     .card:hover {
-      transform: translateY(-4px);
-      border-color: #333;
-      background: #0b0b0b;
+      transform: translateY(-5px);
+      border-color: #303030;
+      background: #090909;
+    }
+
+    .card:hover::before {
+      opacity: 1;
+    }
+
+    .card-number {
+      position: relative;
+      color: #333;
+      font-size: 11px;
+      font-weight: 800;
     }
 
     .card h3 {
-      font-size: 16px;
-      margin-bottom: 9px;
+      position: relative;
+
+      margin-top: 28px;
+
+      font-size: 17px;
     }
 
     .card p {
+      position: relative;
+
+      margin-top: 9px;
+
+      color: #606060;
+      font-size: 13px;
+      line-height: 1.65;
+    }
+
+    /* =========================
+       STATS
+    ========================= */
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+
+      margin-top: 13px;
+
+      border: 1px solid #151515;
+      border-radius: 14px;
+
+      overflow: hidden;
+
+      background: #050505;
+    }
+
+    .stat {
+      padding: 25px;
+      text-align: center;
+
+      border-right: 1px solid #151515;
+    }
+
+    .stat:last-child {
+      border-right: none;
+    }
+
+    .stat strong {
+      display: block;
+
+      font-size: 24px;
+      letter-spacing: -1px;
+    }
+
+    .stat span {
+      display: block;
+
+      margin-top: 5px;
+
+      color: #555;
+      font-size: 11px;
+    }
+
+    /* =========================
+       CTA
+    ========================= */
+
+    .cta {
+      position: relative;
+
+      padding: 65px 30px;
+
+      text-align: center;
+
+      border: 1px solid #181818;
+      border-radius: 18px;
+
+      background:
+        radial-gradient(
+          circle at center,
+          #0c0c0c,
+          #030303 65%
+        );
+
+      overflow: hidden;
+    }
+
+    .cta::after {
+      content: "";
+
+      position: absolute;
+      width: 350px;
+      height: 350px;
+
+      left: 50%;
+      top: 50%;
+
+      transform: translate(-50%, -50%);
+
+      border-radius: 50%;
+
+      background: rgba(255,255,255,0.025);
+
+      filter: blur(70px);
+
+      pointer-events: none;
+    }
+
+    .cta-content {
+      position: relative;
+      z-index: 2;
+    }
+
+    .cta h2 {
+      font-size: clamp(27px, 4vw, 40px);
+      letter-spacing: -1.5px;
+    }
+
+    .cta p {
+      max-width: 500px;
+
+      margin: 12px auto 25px;
+
       color: #666;
       font-size: 13px;
       line-height: 1.6;
     }
 
-    /* FOOTER */
+    /* =========================
+       FOOTER
+    ========================= */
+
     footer {
       position: relative;
-      z-index: 3;
-      text-align: center;
-      padding: 30px;
+      z-index: 5;
+
       border-top: 1px solid #111;
-      color: #444;
-      font-size: 12px;
+
+      padding: 30px 20px;
+
+      text-align: center;
+
+      color: #3d3d3d;
+      font-size: 11px;
     }
 
-    @media (max-width: 750px) {
+    /* =========================
+       ANIMATIONS
+    ========================= */
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(25px);
+      transition:
+        opacity 0.7s ease,
+        transform 0.7s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(18px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* =========================
+       MOBILE
+    ========================= */
+
+    @media (max-width: 760px) {
+
+      nav {
+        width: min(100% - 28px, 1150px);
+      }
+
       .nav-links {
         display: none;
       }
 
-      .hero h1 {
-        letter-spacing: -4px;
+      .hero {
+        width: min(100% - 28px, 1000px);
+        min-height: 90vh;
+      }
+
+      .hero-title {
+        letter-spacing: -5px;
       }
 
       .cards {
         grid-template-columns: 1fr;
       }
 
-      .gif-box {
-        height: 180px;
+      .stats {
+        grid-template-columns: 1fr;
+      }
+
+      .stat {
+        border-right: none;
+        border-bottom: 1px solid #151515;
+      }
+
+      .stat:last-child {
+        border-bottom: none;
+      }
+
+      .gif-container {
+        height: 210px;
+      }
+
+      .section {
+        width: min(100% - 28px, 1050px);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
       }
     }
   </style>
@@ -286,91 +702,208 @@
 
 <body>
 
+  <!-- Animated background -->
   <canvas id="particles"></canvas>
-  <div class="overlay"></div>
+  <div class="background-fade"></div>
 
+  <!-- NAVIGATION -->
   <nav>
-    <div class="logo">Retrox</div>
+    <a href="#" class="brand">Retrox</a>
 
     <div class="nav-links">
-      <a href="#features">Features</a>
-      <a href="https://discord.gg/xPWURSWcXe" target="_blank">Discord</a>
+      <a href="#features" class="nav-link">Features</a>
+      <a href="#about" class="nav-link">About</a>
+
+      <a
+        href="https://discord.gg/xPWURSWcXe"
+        target="_blank"
+        class="nav-link"
+      >
+        Discord
+      </a>
     </div>
   </nav>
 
+
+  <!-- HERO -->
   <main>
 
     <section class="hero">
 
-      <h1>Retrox</h1>
-
-      <div class="typing">
-        <span id="typed"></span><span class="cursor"></span>
+      <div class="badge">
+        <span class="badge-dot"></span>
+        RETROX MODDING HUB
       </div>
 
-      <p class="description">
+      <h1 class="hero-title">
+        Retrox
+      </h1>
+
+      <div class="typing-container">
+        <span id="typed"></span>
+        <span class="cursor"></span>
+      </div>
+
+      <p class="hero-description">
         Retrox is your Gorilla Tag modding hub for PC & VR mods,
-        Frida/root tools, and more. Join the community and start modding today.
+        Frida/root tools, and more. Join the Retrox community and
+        start modding today.
       </p>
 
-      <div class="buttons">
+      <div class="hero-buttons">
+
+        <!-- Download intentionally sends users to Discord -->
         <a
-          class="btn primary"
           href="https://discord.gg/xPWURSWcXe"
           target="_blank"
+          class="button primary"
         >
           Download
         </a>
 
         <a
-          class="btn"
           href="https://discord.gg/xPWURSWcXe"
           target="_blank"
+          class="button"
         >
           Discord
         </a>
+
       </div>
 
-      <div class="gif-box">
-        <!-- Replace this URL with your own GIF -->
-        <img
-          src="https://media.giphy.com/media/3o7TKtnuHOHHUjR38Y/giphy.gif"
-          alt="Retrox animation"
-        >
+
+      <!-- GIF -->
+      <div class="showcase">
+
+        <div class="showcase-top">
+
+          <div class="window-dots">
+            <span class="window-dot"></span>
+            <span class="window-dot"></span>
+            <span class="window-dot"></span>
+          </div>
+
+          <div class="showcase-label">
+            Retrox Preview
+          </div>
+
+        </div>
+
+        <div class="gif-container">
+
+          <!-- Replace this GIF with your own later -->
+          <img
+            src="https://media.giphy.com/media/3o7TKtnuHOHHUjR38Y/giphy.gif"
+            alt="Retrox preview GIF"
+          >
+
+        </div>
+
       </div>
 
     </section>
 
-    <section class="features" id="features">
 
-      <div class="section-title">
-        <h2>Built For Modding</h2>
-        <p>Everything Retrox brings together in one place.</p>
+    <!-- FEATURES -->
+    <section class="section" id="features">
+
+      <div class="section-heading reveal">
+        <span>Retrox</span>
+
+        <h2>Built for modding.</h2>
+
+        <p>
+          A simple place for Gorilla Tag modding resources,
+          tools, and community projects.
+        </p>
       </div>
+
 
       <div class="cards">
 
-        <div class="card">
+        <article class="card reveal">
+          <div class="card-number">01</div>
+
           <h3>Gorilla Tag Mods</h3>
-          <p>
-            Explore PC and VR modding resources for your Gorilla Tag projects.
-          </p>
-        </div>
 
-        <div class="card">
-          <h3>Frida</h3>
           <p>
-            Frida-focused resources and development information for learning
-            and experimentation.
+            Explore PC and VR modding resources for your
+            Gorilla Tag projects.
           </p>
-        </div>
+        </article>
 
-        <div class="card">
+
+        <article class="card reveal">
+          <div class="card-number">02</div>
+
+          <h3>Frida / Root</h3>
+
+          <p>
+            Frida and root-focused resources for development,
+            experimentation, and learning.
+          </p>
+        </article>
+
+
+        <article class="card reveal">
+          <div class="card-number">03</div>
+
           <h3>Retrox Client</h3>
+
           <p>
-            A dedicated place for Retrox client updates, resources, and
-            community releases.
+            A central place for Retrox client information,
+            updates, and community releases.
           </p>
+        </article>
+
+      </div>
+
+
+      <!-- STATS -->
+      <div class="stats reveal">
+
+        <div class="stat">
+          <strong>PC</strong>
+          <span>MOD SUPPORT</span>
+        </div>
+
+        <div class="stat">
+          <strong>VR</strong>
+          <span>MOD SUPPORT</span>
+        </div>
+
+        <div class="stat">
+          <strong>24/7</strong>
+          <span>COMMUNITY</span>
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ABOUT -->
+    <section class="section" id="about">
+
+      <div class="cta reveal">
+
+        <div class="cta-content">
+
+          <h2>Ready to get started?</h2>
+
+          <p>
+            Join the Retrox community, find the latest resources,
+            and start exploring Gorilla Tag modding.
+          </p>
+
+          <a
+            href="https://discord.gg/xPWURSWcXe"
+            target="_blank"
+            class="button primary"
+          >
+            Join Retrox
+          </a>
+
         </div>
 
       </div>
@@ -379,15 +912,17 @@
 
   </main>
 
+
+  <!-- FOOTER -->
   <footer>
-    © 2026 Retrox. All rights reserved.
+    © 2026 Retrox. Built for the Gorilla Tag modding community.
   </footer>
 
 
   <script>
-    /* =========================
+    /* =========================================
        TYPING EFFECT
-       ========================= */
+    ========================================= */
 
     const phrases = [
       "Gorilla Tag Mods.",
@@ -400,45 +935,60 @@
     const typed = document.getElementById("typed");
 
     let phraseIndex = 0;
-    let charIndex = 0;
+    let characterIndex = 0;
     let deleting = false;
 
-    function typeEffect() {
-      const current = phrases[phraseIndex];
+    function typeText() {
+
+      const phrase = phrases[phraseIndex];
 
       if (!deleting) {
-        typed.textContent = current.substring(0, charIndex + 1);
-        charIndex++;
 
-        if (charIndex === current.length) {
+        typed.textContent =
+          phrase.substring(0, characterIndex + 1);
+
+        characterIndex++;
+
+        if (characterIndex >= phrase.length) {
+
           deleting = true;
-          setTimeout(typeEffect, 1800);
+
+          setTimeout(typeText, 1700);
+
           return;
         }
 
-        setTimeout(typeEffect, 65);
+        setTimeout(typeText, 65);
 
       } else {
-        typed.textContent = current.substring(0, charIndex - 1);
-        charIndex--;
 
-        if (charIndex === 0) {
+        typed.textContent =
+          phrase.substring(0, characterIndex - 1);
+
+        characterIndex--;
+
+        if (characterIndex <= 0) {
+
           deleting = false;
-          phraseIndex = (phraseIndex + 1) % phrases.length;
-          setTimeout(typeEffect, 400);
+
+          phraseIndex =
+            (phraseIndex + 1) % phrases.length;
+
+          setTimeout(typeText, 450);
+
           return;
         }
 
-        setTimeout(typeEffect, 35);
+        setTimeout(typeText, 35);
       }
     }
 
-    typeEffect();
+    typeText();
 
 
-    /* =========================
-       CONNECTED PARTICLES
-       ========================= */
+    /* =========================================
+       PARTICLE NETWORK
+    ========================================= */
 
     const canvas = document.getElementById("particles");
     const ctx = canvas.getContext("2d");
@@ -446,79 +996,214 @@
     let particles = [];
 
     function resizeCanvas() {
+
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
+
+      createParticles();
     }
 
-    window.addEventListener("resize", resizeCanvas);
-    resizeCanvas();
-
     function createParticles() {
+
       particles = [];
 
       const amount = Math.min(
-        100,
-        Math.floor((window.innerWidth * window.innerHeight) / 16000)
+        115,
+        Math.max(
+          45,
+          Math.floor(
+            (window.innerWidth * window.innerHeight) / 15000
+          )
+        )
       );
 
       for (let i = 0; i < amount; i++) {
+
         particles.push({
+
           x: Math.random() * canvas.width,
+
           y: Math.random() * canvas.height,
-          vx: (Math.random() - 0.5) * 0.25,
-          vy: (Math.random() - 0.5) * 0.25,
-          size: Math.random() * 1.1 + 0.25
+
+          velocityX:
+            (Math.random() - 0.5) * 0.22,
+
+          velocityY:
+            (Math.random() - 0.5) * 0.22,
+
+          size:
+            Math.random() * 0.8 + 0.25
         });
       }
     }
 
-    createParticles();
+    window.addEventListener(
+      "resize",
+      resizeCanvas
+    );
 
-    window.addEventListener("resize", createParticles);
+    resizeCanvas();
+
 
     function animateParticles() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      for (const p of particles) {
-        p.x += p.vx;
-        p.y += p.vy;
+      ctx.clearRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+      );
 
-        if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
-        if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+
+      /* Move dots */
+
+      for (const particle of particles) {
+
+        particle.x += particle.velocityX;
+        particle.y += particle.velocityY;
+
+
+        if (
+          particle.x < 0 ||
+          particle.x > canvas.width
+        ) {
+          particle.velocityX *= -1;
+        }
+
+
+        if (
+          particle.y < 0 ||
+          particle.y > canvas.height
+        ) {
+          particle.velocityY *= -1;
+        }
+
+
+        /* Tiny white dot */
 
         ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fillStyle = "rgba(255,255,255,0.65)";
+
+        ctx.arc(
+          particle.x,
+          particle.y,
+          particle.size,
+          0,
+          Math.PI * 2
+        );
+
+        ctx.fillStyle =
+          "rgba(255,255,255,0.65)";
+
         ctx.fill();
       }
 
-      for (let i = 0; i < particles.length; i++) {
-        for (let j = i + 1; j < particles.length; j++) {
+
+      /* Connect nearby dots */
+
+      for (
+        let i = 0;
+        i < particles.length;
+        i++
+      ) {
+
+        for (
+          let j = i + 1;
+          j < particles.length;
+          j++
+        ) {
 
           const a = particles[i];
           const b = particles[j];
 
-          const dx = a.x - b.x;
-          const dy = a.y - b.y;
-          const distance = Math.sqrt(dx * dx + dy * dy);
+          const dx =
+            a.x - b.x;
 
-          if (distance < 115) {
-            const opacity = (1 - distance / 115) * 0.16;
+          const dy =
+            a.y - b.y;
+
+          const distance =
+            Math.sqrt(
+              dx * dx + dy * dy
+            );
+
+
+          if (distance < 125) {
+
+            const opacity =
+              (1 - distance / 125) * 0.14;
 
             ctx.beginPath();
-            ctx.moveTo(a.x, a.y);
-            ctx.lineTo(b.x, b.y);
-            ctx.strokeStyle = `rgba(255,255,255,${opacity})`;
-            ctx.lineWidth = 0.5;
+
+            ctx.moveTo(
+              a.x,
+              a.y
+            );
+
+            ctx.lineTo(
+              b.x,
+              b.y
+            );
+
+            ctx.strokeStyle =
+              `rgba(255,255,255,${opacity})`;
+
+            ctx.lineWidth = 0.45;
+
             ctx.stroke();
           }
         }
       }
 
-      requestAnimationFrame(animateParticles);
+
+      requestAnimationFrame(
+        animateParticles
+      );
     }
 
     animateParticles();
+
+
+    /* =========================================
+       SCROLL REVEAL
+    ========================================= */
+
+    const revealElements =
+      document.querySelectorAll(".reveal");
+
+
+    const revealObserver =
+      new IntersectionObserver(
+        entries => {
+
+          entries.forEach(entry => {
+
+            if (entry.isIntersecting) {
+
+              entry.target.classList.add(
+                "visible"
+              );
+
+              revealObserver.unobserve(
+                entry.target
+              );
+            }
+
+          });
+
+        },
+        {
+          threshold: 0.12
+        }
+      );
+
+
+    revealElements.forEach(element => {
+
+      revealObserver.observe(
+        element
+      );
+
+    });
   </script>
 
 </body>
