@@ -1,0 +1,526 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Retrox — Gorilla Tag Mods</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    html, body {
+      width: 100%;
+      min-height: 100%;
+      background: #000;
+      color: #fff;
+      overflow-x: hidden;
+    }
+
+    body {
+      position: relative;
+    }
+
+    /* PARTICLE BACKGROUND */
+    #particles {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(
+        circle at center,
+        rgba(255,255,255,0.025),
+        rgba(0,0,0,0.9) 75%
+      );
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* NAVBAR */
+    nav {
+      position: relative;
+      z-index: 5;
+      width: 100%;
+      padding: 22px 6%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.8px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 10px;
+    }
+
+    .nav-links a {
+      color: #aaa;
+      text-decoration: none;
+      font-size: 14px;
+      padding: 9px 14px;
+      border-radius: 8px;
+      transition: 0.2s ease;
+    }
+
+    .nav-links a:hover {
+      color: #fff;
+      background: #111;
+    }
+
+    /* HERO */
+    .hero {
+      position: relative;
+      z-index: 3;
+      min-height: calc(100vh - 75px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    .hero h1 {
+      font-size: clamp(65px, 12vw, 145px);
+      line-height: 0.9;
+      font-weight: 900;
+      letter-spacing: -7px;
+    }
+
+    .typing {
+      margin-top: 20px;
+      min-height: 30px;
+      color: #d0d0d0;
+      font-size: clamp(16px, 2vw, 21px);
+      font-weight: 500;
+    }
+
+    .cursor {
+      display: inline-block;
+      width: 2px;
+      height: 20px;
+      background: #fff;
+      margin-left: 4px;
+      vertical-align: middle;
+      animation: blink 0.8s infinite;
+    }
+
+    @keyframes blink {
+      50% {
+        opacity: 0;
+      }
+    }
+
+    .description {
+      max-width: 600px;
+      margin-top: 18px;
+      color: #777;
+      line-height: 1.6;
+      font-size: 14px;
+    }
+
+    /* BUTTONS */
+    .buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 28px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 135px;
+      padding: 12px 19px;
+      border-radius: 9px;
+      border: 1px solid #222;
+      background: #090909;
+      color: #fff;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 700;
+      transition: 0.2s ease;
+    }
+
+    .btn:hover {
+      background: #151515;
+      border-color: #444;
+      transform: translateY(-2px);
+    }
+
+    .btn.primary {
+      background: #fff;
+      color: #000;
+      border-color: #fff;
+    }
+
+    .btn.primary:hover {
+      background: #ddd;
+    }
+
+    /* GIF */
+    .gif-box {
+      margin-top: 50px;
+      width: min(520px, 90vw);
+      height: 220px;
+      border: 1px solid #181818;
+      border-radius: 14px;
+      overflow: hidden;
+      background: #050505;
+      box-shadow: 0 20px 70px rgba(0,0,0,0.7);
+    }
+
+    .gif-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      opacity: 0.8;
+    }
+
+    /* FEATURES */
+    .features {
+      position: relative;
+      z-index: 3;
+      max-width: 1050px;
+      margin: 0 auto;
+      padding: 80px 25px 120px;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 35px;
+    }
+
+    .section-title h2 {
+      font-size: 28px;
+    }
+
+    .section-title p {
+      color: #666;
+      margin-top: 8px;
+      font-size: 14px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .card {
+      background: rgba(8,8,8,0.92);
+      border: 1px solid #171717;
+      border-radius: 13px;
+      padding: 25px;
+      transition: 0.25s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      border-color: #333;
+      background: #0b0b0b;
+    }
+
+    .card h3 {
+      font-size: 16px;
+      margin-bottom: 9px;
+    }
+
+    .card p {
+      color: #666;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    /* FOOTER */
+    footer {
+      position: relative;
+      z-index: 3;
+      text-align: center;
+      padding: 30px;
+      border-top: 1px solid #111;
+      color: #444;
+      font-size: 12px;
+    }
+
+    @media (max-width: 750px) {
+      .nav-links {
+        display: none;
+      }
+
+      .hero h1 {
+        letter-spacing: -4px;
+      }
+
+      .cards {
+        grid-template-columns: 1fr;
+      }
+
+      .gif-box {
+        height: 180px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <canvas id="particles"></canvas>
+  <div class="overlay"></div>
+
+  <nav>
+    <div class="logo">Retrox</div>
+
+    <div class="nav-links">
+      <a href="#features">Features</a>
+      <a href="https://discord.gg/xPWURSWcXe" target="_blank">Discord</a>
+    </div>
+  </nav>
+
+  <main>
+
+    <section class="hero">
+
+      <h1>Retrox</h1>
+
+      <div class="typing">
+        <span id="typed"></span><span class="cursor"></span>
+      </div>
+
+      <p class="description">
+        Retrox is your Gorilla Tag modding hub for PC & VR mods,
+        Frida/root tools, and more. Join the community and start modding today.
+      </p>
+
+      <div class="buttons">
+        <a
+          class="btn primary"
+          href="https://discord.gg/xPWURSWcXe"
+          target="_blank"
+        >
+          Download
+        </a>
+
+        <a
+          class="btn"
+          href="https://discord.gg/xPWURSWcXe"
+          target="_blank"
+        >
+          Discord
+        </a>
+      </div>
+
+      <div class="gif-box">
+        <!-- Replace this URL with your own GIF -->
+        <img
+          src="https://media.giphy.com/media/3o7TKtnuHOHHUjR38Y/giphy.gif"
+          alt="Retrox animation"
+        >
+      </div>
+
+    </section>
+
+    <section class="features" id="features">
+
+      <div class="section-title">
+        <h2>Built For Modding</h2>
+        <p>Everything Retrox brings together in one place.</p>
+      </div>
+
+      <div class="cards">
+
+        <div class="card">
+          <h3>Gorilla Tag Mods</h3>
+          <p>
+            Explore PC and VR modding resources for your Gorilla Tag projects.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>Frida</h3>
+          <p>
+            Frida-focused resources and development information for learning
+            and experimentation.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>Retrox Client</h3>
+          <p>
+            A dedicated place for Retrox client updates, resources, and
+            community releases.
+          </p>
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <footer>
+    © 2026 Retrox. All rights reserved.
+  </footer>
+
+
+  <script>
+    /* =========================
+       TYPING EFFECT
+       ========================= */
+
+    const phrases = [
+      "Gorilla Tag Mods.",
+      "Best Frida Servers.",
+      "Free Frida/Root.",
+      "PC & VR Mods!",
+      "Retrox Client."
+    ];
+
+    const typed = document.getElementById("typed");
+
+    let phraseIndex = 0;
+    let charIndex = 0;
+    let deleting = false;
+
+    function typeEffect() {
+      const current = phrases[phraseIndex];
+
+      if (!deleting) {
+        typed.textContent = current.substring(0, charIndex + 1);
+        charIndex++;
+
+        if (charIndex === current.length) {
+          deleting = true;
+          setTimeout(typeEffect, 1800);
+          return;
+        }
+
+        setTimeout(typeEffect, 65);
+
+      } else {
+        typed.textContent = current.substring(0, charIndex - 1);
+        charIndex--;
+
+        if (charIndex === 0) {
+          deleting = false;
+          phraseIndex = (phraseIndex + 1) % phrases.length;
+          setTimeout(typeEffect, 400);
+          return;
+        }
+
+        setTimeout(typeEffect, 35);
+      }
+    }
+
+    typeEffect();
+
+
+    /* =========================
+       CONNECTED PARTICLES
+       ========================= */
+
+    const canvas = document.getElementById("particles");
+    const ctx = canvas.getContext("2d");
+
+    let particles = [];
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+
+    window.addEventListener("resize", resizeCanvas);
+    resizeCanvas();
+
+    function createParticles() {
+      particles = [];
+
+      const amount = Math.min(
+        100,
+        Math.floor((window.innerWidth * window.innerHeight) / 16000)
+      );
+
+      for (let i = 0; i < amount; i++) {
+        particles.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          vx: (Math.random() - 0.5) * 0.25,
+          vy: (Math.random() - 0.5) * 0.25,
+          size: Math.random() * 1.1 + 0.25
+        });
+      }
+    }
+
+    createParticles();
+
+    window.addEventListener("resize", createParticles);
+
+    function animateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      for (const p of particles) {
+        p.x += p.vx;
+        p.y += p.vy;
+
+        if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+        if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fillStyle = "rgba(255,255,255,0.65)";
+        ctx.fill();
+      }
+
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+
+          const a = particles[i];
+          const b = particles[j];
+
+          const dx = a.x - b.x;
+          const dy = a.y - b.y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+
+          if (distance < 115) {
+            const opacity = (1 - distance / 115) * 0.16;
+
+            ctx.beginPath();
+            ctx.moveTo(a.x, a.y);
+            ctx.lineTo(b.x, b.y);
+            ctx.strokeStyle = `rgba(255,255,255,${opacity})`;
+            ctx.lineWidth = 0.5;
+            ctx.stroke();
+          }
+        }
+      }
+
+      requestAnimationFrame(animateParticles);
+    }
+
+    animateParticles();
+  </script>
+
+</body>
+</html>
+```
